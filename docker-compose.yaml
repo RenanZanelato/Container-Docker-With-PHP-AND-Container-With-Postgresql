@@ -1,0 +1,49 @@
+version: '3'
+services:
+    php:
+        build:
+          context: .
+          dockerfile: ./.docker/Dockerfile
+        container_name: nomedocontainer
+        ports:
+          - 8081:80
+        volumes:
+          - ./:/var/www/html
+        links: 
+            - postgresql:postgresql
+    postgresql:
+        image: postgres
+        container_name: postgres
+        environment:
+          POSTGRES_USER: "pgadmin"
+          POSTGRES_PASSWORD: "pgadmin"
+          POSTGRES_DB: "postgresql"
+        ports:
+          - "15432:5432"
+        volumes:
+          - postgresql-volume:/var/lib/postgresql/data 
+          - postgresql-conf:/etc/postgresql/
+        networks:
+          - postgresql-network
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgadmin
+        environment:
+          PGADMIN_DEFAULT_EMAIL: "pgadmin"
+          PGADMIN_DEFAULT_PASSWORD: "pgadmin"
+        ports:
+          - "16543:80"
+        volumes:
+          - ./data/pgadmin/:/var/www/html
+        depends_on:
+          - postgresql
+        networks:
+          - postgresql-network
+networks: 
+    postgresql-network:
+        driver: bridge
+volumes:
+    postgresql-volume:
+      external: true
+    postgresql-conf:
+      external: true
