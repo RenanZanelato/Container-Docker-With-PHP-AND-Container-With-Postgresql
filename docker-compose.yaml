@@ -6,7 +6,7 @@ services:
           dockerfile: ./.docker/Dockerfile
         container_name: nomedocontainer
         ports:
-          - 8081:80
+          - __PORTA__:80
         volumes:
           - ./:/var/www/html
         links: 
@@ -19,7 +19,7 @@ services:
           POSTGRES_PASSWORD: "pgadmin"
           POSTGRES_DB: "postgresql"
         ports:
-          - "15432:5432"
+          - "__PORTA__:5432"
         volumes:
           - postgresql-volume:/var/lib/postgresql/data 
           - postgresql-conf:/etc/postgresql/
@@ -32,7 +32,7 @@ services:
           PGADMIN_DEFAULT_EMAIL: "pgadmin"
           PGADMIN_DEFAULT_PASSWORD: "pgadmin"
         ports:
-          - "16543:80"
+          - "__PORTA__:80"
         volumes:
           - ./data/pgadmin/:/var/www/html
         depends_on:
